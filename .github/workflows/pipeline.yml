@@ -1,0 +1,36 @@
+name: Pipeline CI/CD - Paciente
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  configuration-environment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do projeto
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: 21
+          distribution: 'temurin'
+
+      - name: Build do WAR do projeto
+        run: |
+          echo "Buildando o WAR..."
+          mvn clean package
+          echo "Buildando concluído com Sucesso!"
+
+      - name: Faz o Deploy para VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH }}
+          port: ${{ secrets.VPS_PORT }}
+          source: "target/ms-paciente.jar"
+          target: "/app"
+          strip_components: 1
