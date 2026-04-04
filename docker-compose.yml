@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  ms-paciente:
+    container_name: consultorio
+    image: ms-paciente:1.0.0
+    build: .
+    ports:
+      - "8082:8080"
+    restart: always
+    networks:
+      - consultorio-network
+
+networks:
+  consultorio-network:
+    driver: bridge
