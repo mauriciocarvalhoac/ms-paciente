@@ -1,8 +1,8 @@
 version: '3.8'
 
 services:
-  ms-paciente:
-    container_name: consultorio
+  ms-app:
+    container_name: ms-paciente
     image: ms-paciente:1.0.0
     build: .
     ports:
